@@ -6,6 +6,28 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+## Project setup
+
+- Clone project
+- Use npm or yarn to install dependencies
+- Install the Firebase JavaScript SDK
+  - \$ npm init
+  - \$ npm install --save firebase
+  - Go to https://firebase.google.com/ and inside console create new project
+- After project is created add config object inside environments (environments.ts and environment.prod.ts)
+  - eg: firebase: {
+    apiKey: "AIzaSyDOCAbC123dEf456GhI789jKl01-MnO",
+    authDomain: "myapp-project-123.firebaseapp.com",
+    databaseURL: "https://myapp-project-123.firebaseio.com",
+    projectId: "myapp-project-123",
+    storageBucket: "myapp-project-123.appspot.com",
+    messagingSenderId: "65211879809",
+    appId: "1:65211879909:web:3ae38ef1cdcb2e01fe5f0c",
+    measurementId: "G-8GSGZQ44ST"
+    }
+- Use Google Cloud Platform to generate Google places api key.
+- Inside index.html file replace API_KEY with your places api key
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
