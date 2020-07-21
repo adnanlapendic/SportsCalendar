@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="row login-component-wrapper">
+    <div class="login-component">
+      <div class="login-title text-center">
+        Sports Calendar
+      </div>
+      <div class="login-text text-center">
+        Hi. We have sent you verification link <b>{{ currentUser.email }}</b
+        >. Please verify your email and proceed to
+        <div class="row">
+          <div class="col-md-12">
+            <button
+              class="btn btn-lg mt-4 btn-success"
+              (click)="navigateToLogin()"
+            >
+              LOGIN
+            </button>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-12">
+            <button
+              class="btn btn-outline-success float-right"
+              (click)="sendVerificationLink()"
+            >
+              Resend verification link
+            </button>
+          </div>
+        </div>
+        <div *ngIf="showErrorMessage" class="row mt-3">
+          <div class="col-md-12">
+            <div class="alert alert-warning" role="alert">
+              You need to verify your email address first.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

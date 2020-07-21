@@ -1,0 +1,25 @@
+.detail-view-component {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  color: gray;
+}
+
+.background-white {
+  background-color: #fff;
+  margin-right: 15px;
+  padding-right: 0;
+}
+.image {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.book-term-button {
+  position: absolute;
+  bottom: 0;
+}
+
+.break-word {
+  word-break: break-all;
+}

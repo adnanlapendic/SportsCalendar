@@ -1,0 +1,176 @@
+<div
+  *ngFor="let result of matchingResults; let i = index"
+  class="row shadow result-card mt-3"
+>
+  <div class="col-md-2" (click)="onResultelected(result)">
+    <img
+      *ngIf="result.personalCoachTerm?.user.image; else noImage"
+      src="{{ result.personalCoachTerm?.user.image }}"
+      style="width: 100%;"
+    />
+    <ng-template #noImage>
+      <img
+        src="../../../../assets/profilePlaceholder.jpg"
+        style="width: 100%;"
+      />
+    </ng-template>
+  </div>
+  <div class="col-md-8" (click)="onResultelected(result)">
+    <div class="row card-info">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-sm-4">Title</div>
+          <div class="col-sm-8">{{ result.personalCoachTerm?.title }}</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">City</div>
+          <div class="col-sm-8">{{ result.personalCoachTerm?.city }}</div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-4">Start Date</div>
+          <div class="col-sm-8">
+            {{ result.personalCoachTerm?.startDate | date }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">End Date</div>
+          <div class="col-sm-8">
+            {{ result.personalCoachTerm?.endDate | date }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">Description</div>
+          <div class="col-sm-8">
+            {{ result.personalCoachTerm?.description }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-sm-3">
+        <div class="row">
+          <div class="col-sm-4">Trainer</div>
+          <div class="col-sm-8">
+            {{ result.personalCoachTerm?.user.name }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">Email</div>
+          <div class="col-sm-8">
+            {{ result.personalCoachTerm?.user.email }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">Phone</div>
+          <div class="col-sm-8">
+            {{ result.personalCoachTerm?.user.phone }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="row" (click)="onResultelected(result)">
+      <div class="col-md-12">
+        <div class="alert alert-green" role="alert">
+          Price:
+          {{ result.personalCoachTerm?.price + result.sportFieldTerm?.price }}€
+          <div>
+            <small>
+              Personal coach {{ result.personalCoachTerm?.price }}€
+            </small>
+          </div>
+          <div>
+            <small> Sport field {{ result.sportFieldTerm?.price }}€ </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <a
+          class="btn btn-outline-success w-100"
+          data-toggle="collapse"
+          href="{{ '#collapseExample' + i }}"
+          role="button"
+          aria-expanded="false"
+        >
+          Sport field info <i class="fas fa-chevron-down"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="collapse" id="{{ 'collapseExample' + i }}">
+    <hr />
+    <div class="text-center sport-field-list-item-title">Sport filed info</div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-2">
+          <img
+            *ngIf="result.sportFieldTerm?.user.image; else noFieldImage"
+            src="{{ result.sportFieldTerm?.user.image }}"
+            style="width: 100%;"
+          />
+          <ng-template #noFieldImage>
+            <img src="../../../../assets/fields.jpg" style="width: 100%;" />
+          </ng-template>
+        </div>
+        <div class="col-md-5 card-info">
+          <div class="row">
+            <div class="col-md-3">City</div>
+            <div class="col-md-9">{{ result.sportFieldTerm?.city }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">Title</div>
+            <div class="col-md-9">{{ result.sportFieldTerm?.title }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">Start Date</div>
+            <div class="col-md-9">
+              {{ result.sportFieldTerm?.startDate | date }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">End Date</div>
+            <div class="col-md-9">
+              {{ result.sportFieldTerm?.endDate | date }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">Description</div>
+            <div class="col-md-9">{{ result.sportFieldTerm?.description }}</div>
+          </div>
+        </div>
+        <div class="col-md-5 card-info">
+          <div class="row">
+            <div class="col-md-3">Address</div>
+            <div class="col-md-9">
+              {{ result.sportFieldTerm?.user.address }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">Email</div>
+            <div class="col-md-9">{{ result.sportFieldTerm?.user.email }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">Phone</div>
+            <div class="col-md-9">{{ result.sportFieldTerm?.user.phone }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">About</div>
+            <div class="col-md-9">{{ result.sportFieldTerm?.user.about }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!foundTerms" class="row">
+  <div class="col-md-12 no-results">
+    <h3 class="text-center lupa"><i class="fas fa-search"></i></h3>
+    <h3 class="text-center title">No results found</h3>
+    <h4 class="text-center message">
+      We can't find any item matching your search.
+    </h4>
+  </div>
+</div>

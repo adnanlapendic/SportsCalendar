@@ -1,0 +1,129 @@
+<nav class="navbar navbar-expand-lg navbar-light shadow">
+  <div
+    *ngIf="!currentUser && !isDashboardComponentAcivated"
+    class="navbar-brand"
+  >
+    Welcome to MySportsCalendar.de
+  </div>
+  <div
+    *ngIf="currentUser && !isDashboardComponentAcivated"
+    class="navbar-brand"
+  >
+    Welcome {{ currentUser.name }}
+  </div>
+  <div *ngIf="isDashboardComponentAcivated" class="navbar-brand">
+    Welcome to your personal Dashboard
+  </div>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div *ngIf="currentUser; else login" class="ml-auto">
+      <ul
+        *ngIf="currentUser.role != 'Athlete'"
+        class="navbar-nav mr-auto mt-2 mt-lg-0"
+      >
+        <li class="nav-item ml-1 mt-1">
+          <button class="btn btn-success my-2 my-sm-0" routerLink="/">
+            Home
+          </button>
+        </li>
+        <li class="nav-item ml-1 mt-1">
+          <button
+            *ngIf="currentUser.role != 'Athlete'"
+            class="btn btn-success my-2 my-sm-0"
+            routerLink="/dashboard"
+          >
+            My dashboard
+          </button>
+        </li>
+        <li class="nav-item ml-1 mt-1">
+          <button class="btn btn-success my-2 my-sm-0" routerLink="/orders">
+            My Bookings
+          </button>
+        </li>
+        <li class="nav-item ml-1 mt-1">
+          <button class="btn btn-success my-2 my-sm-0" routerLink="/profile">
+            My Profile
+          </button>
+        </li>
+        <li class="nav-item ml-lg-5 mt-1">
+          <button (click)="logout()" class="btn btn-success my-2 my-sm-0">
+            Logout
+          </button>
+        </li>
+      </ul>
+      <ul
+        *ngIf="currentUser.role == 'Athlete'"
+        class="navbar-nav mr-auto mt-2 mt-lg-0"
+      >
+        <li class="nav-item ml-1 mt-1">
+          <button class="btn btn-success my-2 my-sm-0" routerLink="/">
+            Home
+          </button>
+        </li>
+        <li class="nav-item ml-1 mt-1">
+          <button class="btn btn-success my-2 my-sm-0" routerLink="/orders">
+            My Orders
+          </button>
+        </li>
+        <li class="nav-item ml-1 mt-1">
+          <button class="btn btn-success my-2 my-sm-0" routerLink="/profile">
+            My Profile
+          </button>
+        </li>
+        <li *ngIf="isDashboardComponentAcivated" class="nav-item ml-1 mt-1">
+          <button class="btn btn-success my-2 my-sm-0" routerLink="/">
+            Back to Homepage
+          </button>
+        </li>
+        <li class="nav-item ml-lg-5 mt-1">
+          <button (click)="logout()" class="btn btn-success my-2 my-sm-0">
+            Logout
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <ng-template #login>
+      <div class="ml-auto">
+        <ul class="navbar-nav mr-auto ml-1 mt-1">
+          <li class="nav-item ml-lg-1 mt-1">
+            <div class="register-as">
+              Register as:
+            </div>
+          </li>
+
+          <li class="nav-item ml-lg-1 mt-1">
+            <button class="btn btn-success" routerLink="/athlete">
+              Athlete
+            </button>
+          </li>
+          <li class="nav-item ml-lg-1 mt-1">
+            <button class="btn btn-success" routerLink="/personal-coach">
+              Personal Coach
+            </button>
+          </li>
+          <li class="nav-item ml-lg-1 mt-1">
+            <button class="btn btn-success" routerLink="/sport-field-provider">
+              Sport field provider
+            </button>
+          </li>
+          <li class="nav-item ml-lg-5 mt-1">
+            <button class="btn btn-success" routerLink="/login">
+              Login
+            </button>
+          </li>
+        </ul>
+      </div>
+    </ng-template>
+  </div>
+</nav>

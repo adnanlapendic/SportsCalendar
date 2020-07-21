@@ -1,0 +1,165 @@
+<app-navbar></app-navbar>
+<div class="container">
+  <form [formGroup]="searchForm">
+    <div class="row search-component shadow pt-3 mt-5">
+      <div class="col-md-3">
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1"
+                ><i class="fas fa-map-marker-alt"></i
+              ></span>
+            </div>
+            <input
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': submitted && f.city.errors
+              }"
+              formControlName="city"
+              ngx-google-places-autocomplete
+              [options]="options"
+              #placesRef="ngx-places"
+              (onAddressChange)="handleAddressChange($event)"
+            />
+            <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+              <div *ngIf="f.city.errors?.required">
+                Location is required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group">
+                <div
+                  class="input-group-prepend"
+                  (click)="searchStartDate.open()"
+                >
+                  <div class="input-group-text">
+                    <i class="fas fa-calendar-alt"></i>
+                  </div>
+                </div>
+                <mat-datepicker
+                  #searchStartDate
+                  (closed)="startDateInput.blur()"
+                ></mat-datepicker>
+                <input
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': submitted && f.startDate.errors
+                  }"
+                  [min]="minDate"
+                  #startDateInput
+                  formControlName="startDate"
+                  placeholder="Select date"
+                  type="text"
+                  [matDatepicker]="searchStartDate"
+                  (focus)="searchStartDate.open()"
+                />
+                <div
+                  *ngIf="submitted && f.startDate.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.startDate.errors?.required">
+                    Start date is required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend" (click)="searchEndDate.open()">
+                  <div class="input-group-text">
+                    <i class="fas fa-calendar-alt"></i>
+                  </div>
+                </div>
+                <mat-datepicker
+                  #searchEndDate
+                  (closed)="endDateInput.blur()"
+                ></mat-datepicker>
+                <input
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': submitted && f.endDate.errors
+                  }"
+                  #endDateInput
+                  formControlName="endDate"
+                  placeholder="Select date"
+                  type="text"
+                  [min]="f.startDate.value || minDate"
+                  [matDatepicker]="searchEndDate"
+                  (focus)="searchEndDate.open()"
+                />
+                <div
+                  *ngIf="submitted && f.endDate.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.endDate.errors?.required">
+                    End date is required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="input-group">
+                <select
+                  class="custom-select"
+                  [ngClass]="{
+                    'is-invalid': submitted && f.sport.errors
+                  }"
+                  id="inputGroupSelect01"
+                  (change)="onSportSelect($event)"
+                  formControlName="sport"
+                >
+                  <option *ngFor="let sport of sports" value="{{ sport }}">
+                    {{ sport }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="submitted && f.sport.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.sport.errors?.required">
+                    Sport is required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-success w-100" (click)="submitSearchForm()">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="row">
+    <div class="col-md-12">
+      <app-term-results
+        *ngIf="!selectedResult; else detailView"
+        [matchingResults]="matchingResults"
+        (onResultSelected)="onResultSelected($event)"
+      ></app-term-results>
+      <ng-template #detailView>
+        <app-detail-view
+          [result]="selectedResult"
+          (selectedResult)="onResultSelected($event)"
+        ></app-detail-view>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+<div class="container">
+  <div class="row login-component-wrapper">
+    <div class="login-component col-md-6 col-lg-4">
+      <div class="login-title text-center">
+        Sports Calendar
+      </div>
+      <div class="login-text text-center">
+        Login to your Account
+      </div>
+      <form [formGroup]="loginForm">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email address</label>
+          <input
+            type="email"
+            formControlName="email"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+          />
+          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+            <div *ngIf="f.email.errors?.required">
+              Email is required
+            </div>
+            <div *ngIf="f.email.errors?.email">
+              Email must be a valid email address
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input
+            formControlName="password"
+            type="password"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+            id="exampleInputPassword1"
+          />
+          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors?.required">
+              Password is required
+            </div>
+          </div>
+        </div>
+        <p>
+          New user?
+          <a class="link-to-register" routerLink="/register">SIGN UP</a>
+        </p>
+        <button (click)="login()" class="btn btn-success btn-lg w-100">
+          LOGIN
+        </button>
+      </form>
+      <div *ngIf="showEmailVerifiedMsg" class="col-md-12">
+        <div class="alert alert-warning" role="alert">
+          Email not verified. Please click
+          <a class="click-here-link" (click)="sendVerificationLink()">here</a>
+          to verify.
+        </div>
+      </div>
+      <div *ngIf="loginError" class="col-md-12 mt-2">
+        <div class="alert alert-danger" role="alert">
+          {{ loginError }}
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <button
+            class="btn btn-outline-danger w-100"
+            (click)="loginWithGoogle()"
+          >
+            <img
+              src="../../../../assets/google_icon.png"
+              style="height: 24px; float: left;"
+            />
+            Login with Google
+          </button>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <button
+            class="btn btn-outline-primary w-100"
+            (click)="loginWithFacebook()"
+          >
+            <img
+              src="../../../../assets/facebook_icon.png"
+              style="height: 24px; float: left;"
+            />
+            Login with Facebook
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

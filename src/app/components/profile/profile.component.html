@@ -1,0 +1,417 @@
+<app-navbar></app-navbar>
+<div class="container" style="color: gray;">
+  <div class="row mt-3 mb-3">
+    <div class="col-md-12">
+      <h3>Profile page</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 mb-2">
+      <img
+        *ngIf="downloadURL; else oldImage"
+        src="{{ downloadURL }}"
+        style="width: 100%;"
+      />
+      <ng-template #oldImage>
+        <img
+          *ngIf="currentUser.image; else showPlaceholder"
+          src="{{ currentUser.image }}"
+          style="width: 100%;"
+        />
+        <ng-template #showPlaceholder>
+          <img
+            src="../../../assets/profilePlaceholder.jpg"
+            style="width: 100%;"
+          />
+        </ng-template>
+      </ng-template>
+      <button
+        *ngIf="editProfile"
+        class="btn btn-outline-success w-100 mt-2 mb-2"
+        (click)="fileInput.click()"
+      >
+        Change picture
+      </button>
+      <input
+        #fileInput
+        type="file"
+        (change)="uploadpic($event)"
+        style="display: none;"
+      />
+      <div *ngIf="editProfile" class="progress">
+        <div
+          class="progress-bar bg-success"
+          role="progressbar"
+          [style.width.%]="uploadPercent | async"
+          aria-valuenow="uploadPercent"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        ></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <h4 class="text-center">{{ currentUser.name }}</h4>
+      </div>
+      <div class="row">
+        <h5 class="text-center">{{ currentUser.role }}</h5>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-outline-success" (click)="toggleEditProfile()">
+        Edit Profile
+      </button>
+    </div>
+  </div>
+  <div
+    *ngIf="currentUser.role != 'Sport field provider'; else sportFieldForm"
+    class="row"
+  >
+    <div *ngIf="editProfile; else showInfo" class="col-md-12 mb-5">
+      <form [formGroup]="editForm">
+        <div class="form-group row">
+          <label for="nameInput" class="col-sm-2 col-form-label"
+            >Full name</label
+          >
+          <div class="col-sm-10">
+            <input
+              type="text"
+              formControlName="name"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+              id="nameInput"
+              required
+            />
+          </div>
+          <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+            <div *ngIf="f.name.errors?.required">
+              Name is required
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="emailInput" class="col-sm-2 col-form-label">Email</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              formControlName="email"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+              id="emailInput"
+              required
+            />
+          </div>
+          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+            <div *ngIf="f.email.errors?.required">Email is required</div>
+            <div *ngIf="f.email.errors?.email">
+              Email must be a valid email address
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="phoneInput" class="col-sm-2 col-form-label">Phone </label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              formControlName="phone"
+              class="form-control"
+              id="phoneInput"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="addressInput" class="col-sm-2 col-form-label"
+            >Address
+          </label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              formControlName="address"
+              class="form-control"
+              id="addressInput"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="aboutInput" class="col-sm-2 col-form-label">About </label>
+          <div class="col-sm-10">
+            <textarea
+              type="text"
+              formControlName="about"
+              class="form-control"
+              id="aboutInput"
+            ></textarea>
+          </div>
+        </div>
+      </form>
+      <button
+        class="btn btn-lg btn-success float-right ml-md-2"
+        (click)="update()"
+      >
+        Save
+      </button>
+      <button class="btn btn-lg btn-warning float-right" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+    <ng-template #showInfo>
+      <div class="col-sm-12 mt-md-5">
+        <div class="form-group row mt-2">
+          <div class="col-sm-4 col-md-2">Full name</div>
+          <div class="col-sm-8 col-md-10">{{ currentUser.name }}</div>
+        </div>
+        <div class="form-group row mt-2">
+          <div class="col-sm-4 col-md-2">Email</div>
+          <div class="col-sm-8 col-md-10">{{ currentUser.email }}</div>
+        </div>
+        <div class="form-group row mt-2">
+          <div class="col-sm-4 col-md-2">Phone</div>
+          <div class="col-sm-8 col-md-10">{{ currentUser.phone }}</div>
+        </div>
+        <div class="form-group row mt-2">
+          <div class="col-sm-4 col-md-2">address</div>
+          <div class="col-sm-8 col-md-10">{{ currentUser.address }}</div>
+        </div>
+        <div class="form-group row mt-2">
+          <div class="col-sm-4 col-md-2">About</div>
+          <div class="col-sm-8 col-md-10">{{ currentUser.about }}</div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <ng-template #sportFieldForm>
+    <div *ngIf="editProfile; else showData" class="row">
+      <div class="col-md-12">
+        <form [formGroup]="editForm">
+          <div class="form-group row">
+            <label for="nameInput" class="col-sm-2 col-form-label"
+              >Your name</label
+            >
+            <div class="col-sm-10">
+              <input
+                type="text"
+                formControlName="name"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                id="nameInput"
+                required
+              />
+            </div>
+            <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+              <div *ngIf="f.name.errors?.required">
+                Name is required
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="emailInput" class="col-sm-2 col-form-label"
+              >Email</label
+            >
+            <div class="col-sm-10">
+              <input
+                type="text"
+                formControlName="email"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                id="emailInput"
+                required
+              />
+            </div>
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+              <div *ngIf="f.email.errors?.required">Email is required</div>
+              <div *ngIf="f.email.errors?.email">
+                Email must be a valid email address
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="phoneInput" class="col-sm-2 col-form-label"
+              >Phone
+            </label>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                formControlName="phone"
+                class="form-control"
+                id="phoneInput"
+              />
+            </div>
+          </div>
+
+          <hr />
+
+          <h4>Sport field info</h4>
+          <div class="form-group row">
+            <label for="cityInput" class="col-sm-2 col-form-label">City </label>
+            <div class="col-sm-10">
+              <input
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
+                formControlName="city"
+                ngx-google-places-autocomplete
+                [options]="options"
+                #placesRef="ngx-places"
+                (onAddressChange)="handleAddressChange($event)"
+              />
+            </div>
+            <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+              <div *ngIf="f.city.errors?.required">
+                City is required
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="addressInput" class="col-sm-2 col-form-label"
+              >Address
+            </label>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                formControlName="address"
+                class="form-control"
+                id="addressInput"
+              />
+            </div>
+            <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
+              <div *ngIf="f.address.errors?.required">
+                Address is required
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="aboutInput" class="col-sm-2 col-form-label"
+              >About sport field
+            </label>
+            <div class="col-sm-10">
+              <textarea
+                type="text"
+                formControlName="about"
+                class="form-control"
+                id="aboutInput"
+              ></textarea>
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-md-12">
+            <button
+              class="btn btn-lg btn-success float-right ml-md-2"
+              (click)="update()"
+            >
+              Save
+            </button>
+            <button
+              class="btn btn-lg btn-warning float-right"
+              (click)="cancel()"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #showData>
+      <div class="row">
+        <div class="col-md-12">
+          <form [formGroup]="editForm">
+            <div class="form-group row">
+              <label for="nameInput" class="col-sm-2 col-form-label"
+                >Your name</label
+              >
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  formControlName="name"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                  id="nameInput"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="emailInput" class="col-sm-2 col-form-label"
+                >Email</label
+              >
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  formControlName="email"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                  id="emailInput"
+                  disabled
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="phoneInput" class="col-sm-2 col-form-label"
+                >Phone
+              </label>
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  formControlName="phone"
+                  class="form-control"
+                  id="phoneInput"
+                  disabled
+                />
+              </div>
+            </div>
+
+            <hr />
+
+            <h4>Sport field info</h4>
+            <div class="form-group row">
+              <label for="cityInput" class="col-sm-2 col-form-label"
+                >City
+              </label>
+              <div class="col-sm-10">
+                <input
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
+                  formControlName="city"
+                  ngx-google-places-autocomplete
+                  [options]="options"
+                  #placesRef="ngx-places"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="addressInput" class="col-sm-2 col-form-label"
+                >Address
+              </label>
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  formControlName="address"
+                  class="form-control"
+                  id="addressInput"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="aboutInput" class="col-sm-2 col-form-label"
+                >About sport field
+              </label>
+              <div class="col-sm-10">
+                <textarea
+                  type="text"
+                  formControlName="about"
+                  class="form-control"
+                  id="aboutInput"
+                  disabled
+                ></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

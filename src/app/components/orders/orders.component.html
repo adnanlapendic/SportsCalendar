@@ -1,0 +1,419 @@
+<app-navbar></app-navbar>
+<div
+  *ngIf="currentUser.role == 'Athlete'; else otherLayout"
+  class="container"
+  style="color: gray;"
+>
+  <div class="row mt-3 mb-3">
+    <div class="col-md-12">
+      <h3>My Orders</h3>
+    </div>
+  </div>
+  <div *ngIf="bookings?.length > 0; else showNoBookings" class="row">
+    <div class="col-md-6">
+      <div *ngFor="let booking of bookings" class="row mt-2 my-order shadow">
+        <div class="col-md-12" (click)="onOrderClicked(booking)">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-12">
+                  Sport: {{ booking.perosnalCoach.sport }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  Start Date:
+                  {{
+                    booking.perosnalCoach.startDate.seconds * 1000
+                      | date: "dd.MM.yyyy"
+                  }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  End Date:
+                  {{
+                    booking.perosnalCoach.endDate.seconds * 1000
+                      | date: "dd.MM.yyyy"
+                  }}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="row">
+                Price:
+                {{ booking.perosnalCoach.price + booking.sportField.price }} €
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6">
+              <small
+                *ngIf="
+                  !booking.canceledByPersonalCoach &&
+                  !booking.confirmedByPersonalCoach
+                "
+                >Perosnal coach status:
+                <strong style="color: rgb(216, 216, 0);">PENDING</strong>
+              </small>
+              <small
+                *ngIf="
+                  booking.canceledByPersonalCoach &&
+                  !booking.confirmedByPersonalCoach
+                "
+                >Perosnal coach status:
+                <strong style="color: red;">CANCELED</strong>
+              </small>
+              <small
+                *ngIf="
+                  !booking.canceledByPersonalCoach &&
+                  booking.confirmedByPersonalCoach
+                "
+                >Perosnal coach status:
+                <strong style="color: #28a745;">CONFIRMED</strong>
+              </small>
+            </div>
+            <div class="col-md-6">
+              <small
+                *ngIf="
+                  !booking.canceledBySportFieldProvider &&
+                  !booking.confirmedBySportFieldProvider
+                "
+                >Sport field status:
+                <strong style="color: rgb(216, 216, 0);">PENDING</strong>
+              </small>
+              <small
+                *ngIf="
+                  booking.canceledBySportFieldProvider &&
+                  !booking.confirmedBySportFieldProvider
+                "
+                >Sport field status:
+                <strong style="color: red;">CANCELED</strong>
+              </small>
+              <small
+                *ngIf="
+                  !booking.canceledBySportFieldProvider &&
+                  booking.confirmedBySportFieldProvider
+                "
+                >Sport field status:
+                <strong style="color: #28a745;">CONFIRMED</strong>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-1"></div>
+    <div *ngIf="selectedBooking" class="col-md-5">
+      <h5 class="text-center">Term info</h5>
+      <div class="row">
+        <div class="col-md-4"><strong>Title</strong></div>
+        <div class="col-md-8">
+          {{ selectedBooking.perosnalCoach.title }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"><strong>Description</strong></div>
+        <div class="col-md-8">
+          {{ selectedBooking.perosnalCoach.description }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"><strong>City</strong></div>
+        <div class="col-md-8">
+          {{ selectedBooking.perosnalCoach.city }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"><strong>Trainer</strong></div>
+        <div class="col-md-8">
+          {{ selectedBooking.perosnalCoach.user.name }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"><strong>Start date</strong></div>
+        <div class="col-md-8">
+          {{
+            selectedBooking.perosnalCoach.startDate.seconds * 1000
+              | date: "dd.MM.yyyy"
+          }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"><strong>End date</strong></div>
+        <div class="col-md-8">
+          {{
+            selectedBooking.perosnalCoach.endDate.seconds * 1000
+              | date: "dd.MM.yyyy"
+          }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"><strong>Address</strong></div>
+        <div class="col-md-8">
+          {{ selectedBooking.sportField.address }}
+        </div>
+      </div>
+      <div class="row">
+        <div
+          *ngIf="
+            selectedBooking.canceledByPersonalCoach ||
+              selectedBooking.canceledBySportFieldProvider;
+            else cancelButton
+          "
+          class="col-md-12"
+        >
+          <button class="btn btn-danger float-right" (click)="cancelTerm()">
+            Delete term
+          </button>
+        </div>
+        <ng-template #cancelButton>
+          <div class="col-md-12 float-right">
+            <button
+              class="btn btn-outline-danger float-right"
+              (click)="cancelTerm()"
+            >
+              Cancel term
+            </button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <ng-template #showNoBookings>
+    <div class="row">
+      <div class="col-md-12 no-results">
+        <h3 class="text-center title">No Orders</h3>
+        <h4 class="text-center message">
+          You don't have any orders yet.
+        </h4>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #otherLayout>
+  <div class="container" style="color: gray;">
+    <div class="row mt-3 mb-3">
+      <div class="col-md-12">
+        <h3>My Bookings</h3>
+      </div>
+    </div>
+    <div *ngIf="currentUser.role == 'Personal coach'">
+      <div *ngIf="bookings?.length > 0; else showNoBookings2" class="row">
+        <div class="col-md-12">
+          <div
+            *ngFor="let booking of bookings"
+            class="row mt-2 my-order shadow"
+            (click)="orderClickedByPersonalCoach(booking)"
+            [ngClass]="{
+              'new-booking': booking.confirmedByPersonalCoach == false
+            }"
+          >
+            <div class="col-md-5">
+              <div class="row">
+                <div class="col-md-12">Athlete: {{ booking.athlete.name }}</div>
+                <div class="col-md-12">Email: {{ booking.athlete.email }}</div>
+                <div class="col-md-12">
+                  Start Date:
+                  {{
+                    booking.perosnalCoach.startDate.seconds * 1000
+                      | date: "dd.MM.yyyy"
+                  }}
+                </div>
+                <div class="col-md-12">
+                  End Date:
+                  {{
+                    booking.perosnalCoach.endDate.seconds * 1000
+                      | date: "dd.MM.yyyy"
+                  }}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="row">
+                <div class="col-md-12">
+                  Price:
+                  {{ booking.perosnalCoach.price + booking.sportField.price }} €
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  Sport field address:
+                  {{ booking.sportField.user.address || "no info" }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  Sport field email:
+                  {{ booking.sportField.user.email }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  Sport field phone:
+                  {{ booking.sportField.user.phone }}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div
+                *ngIf="booking.confirmedByPersonalCoach == false"
+                class="status-new"
+              >
+                Status: <strong>PENDING</strong>
+              </div>
+              <div
+                *ngIf="booking.confirmedByPersonalCoach == true"
+                class="status-confirmed"
+              >
+                Status: <strong>CONFIRMED</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #showNoBookings2>
+        <div class="row">
+          <div class="col-md-12 no-results">
+            <h3 class="text-center title">No Bookings</h3>
+            <h4 class="text-center message">
+              You don't have any bookings yet.
+            </h4>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <div *ngIf="currentUser.role == 'Sport field provider'">
+      <div *ngIf="bookings?.length > 0; else showNoBookings2" class="row">
+        <div class="col-md-12">
+          <div
+            *ngFor="let booking of bookings"
+            class="row mt-2 my-order shadow"
+            (click)="orderClickedByPersonalCoach(booking)"
+            [ngClass]="{
+              'new-booking': booking.confirmedBySportFieldProvider == false
+            }"
+          >
+            <div class="col-md-5">
+              <div class="row">
+                <div class="col-md-12">Athlete: {{ booking.athlete.name }}</div>
+                <div class="col-md-12">Email: {{ booking.athlete.email }}</div>
+                <div class="col-md-12">
+                  Start Date:
+                  {{
+                    booking.perosnalCoach.startDate.seconds * 1000
+                      | date: "dd.MM.yyyy"
+                  }}
+                </div>
+                <div class="col-md-12">
+                  End Date:
+                  {{
+                    booking.perosnalCoach.endDate.seconds * 1000
+                      | date: "dd.MM.yyyy"
+                  }}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="row">
+                <div class="col-md-12">
+                  Price:
+                  {{ booking.perosnalCoach.price + booking.sportField.price }} €
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  Sport field address:
+                  {{ booking.sportField.user.address || "no info" }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  Sport field email:
+                  {{ booking.sportField.user.email }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  Sport field phone:
+                  {{ booking.sportField.user.phone }}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div
+                *ngIf="booking.confirmedBySportFieldProvider == false"
+                class="status-new"
+              >
+                Status: <strong>PENDING</strong>
+              </div>
+              <div
+                *ngIf="booking.confirmedBySportFieldProvider == true"
+                class="status-confirmed"
+              >
+                Status: <strong>CONFIRMED</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #showNoBookings2>
+        <div class="row">
+          <div class="col-md-12 no-results">
+            <h3 class="text-center title">No Bookings</h3>
+            <h4 class="text-center message">
+              You don't have any bookings yet.
+            </h4>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Are you sure?</h4>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">You are about to cancel booking.</h5>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="close()">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-danger" (click)="onModalConfirm()">
+      Confirm
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #cancelOrConfirmModal let-close="close">
+  <div class="modal-header">
+    <h4 class="modal-title"></h4>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">Confirm or cancel selected booking.</h5>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="confirmBooking()">
+      Confirm
+    </button>
+    <button type="button" class="btn btn-danger" (click)="cancelBooking()">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="close()">
+      Close
+    </button>
+  </div>
+</ng-template>

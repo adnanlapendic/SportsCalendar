@@ -1,0 +1,30 @@
+.login-component-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.login-component {
+  margin: auto;
+  border: 1px solid rgb(228, 228, 228);
+  padding: 25px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.login-title {
+  color: green;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.login-text {
+  font-size: 20px;
+  color: green;
+  padding: 20px 60px;
+}
+
+.link-to-register {
+  color: green;
+  font-weight: bold;
+}

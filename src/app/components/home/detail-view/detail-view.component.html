@@ -1,0 +1,297 @@
+<div class="row shadow detail-view-component">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-3">
+        <button
+          (click)="onBackClicked()"
+          class="btn btn-outline-success mt-2 mb-2 w-100"
+        >
+          <i class="fas fa-arrow-circle-left"></i> BACK
+        </button>
+      </div>
+      <div class="col-md-6"><h3 class="text-center">Term Info</h3></div>
+      <div class="col-md-3"></div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-md-3">
+        <div class="row">
+          <div class="col-md-12">
+            <img
+              *ngIf="result.sportFieldTerm?.user.image; else noFieldImage"
+              src="{{ result.sportFieldTerm?.user.image }}"
+              class="image"
+            />
+            <ng-template #noFieldImage>
+              <img src="../../../../assets/fields.jpg" class="image" />
+            </ng-template>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h5 class="text-center">Sport field info</h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">Title</div>
+          <div class="col-md-8">{{ result.sportFieldTerm.title }}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">Address</div>
+          <div class="col-md-8"></div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">Phone</div>
+          <div class="col-md-8"></div>
+        </div>
+        <!-- <div class="row">
+          <div class="col-md-4">Email</div>
+          <div class="col-md-8"></div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label for="">About</label>
+          </div>
+        </div> -->
+        <!-- <mwl-calendar-day-view
+          [viewDate]="viewDate"
+          [events]="events"
+          [dayStartHour]="startHour"
+          [dayEndHour]="endHour"
+        >
+        </mwl-calendar-day-view> -->
+      </div>
+      <div class="col-md-6 border-left border-right">
+        <div class="row">
+          <div class="col-md-8">
+            <h5>Title: {{ result.personalCoachTerm.title }}</h5>
+          </div>
+          <div class="col-md-4">
+            <h5>
+              Price:
+              {{
+                result.personalCoachTerm?.price + result.sportFieldTerm.price
+              }}
+              €/h
+            </h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <h6>City: {{ result.personalCoachTerm.city }}</h6>
+          </div>
+          <div class="col-md-6">
+            <h6>Sport: {{ result.personalCoachTerm.sport }}</h6>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <h6>
+              Start at:
+              {{ result.personalCoachTerm.startDate | date: "dd.MM.yyyy H:mm" }}
+            </h6>
+          </div>
+          <div class="col-md-6">
+            <h6>
+              End at:
+              {{ result.personalCoachTerm.endDate | date: "dd.MM.yyyy H:mm" }}
+            </h6>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h6>Description: {{ result.personalCoachTerm.description }}</h6>
+          </div>
+        </div>
+        <div class="row mt-4 mb-2">
+          <div class="col-md-12 book-term-button">
+            <button
+              *ngIf="currentUser?.role == 'Athlete'"
+              (click)="createBooking()"
+              class="btn btn-lg btn-success w-100 mb-2"
+            >
+              Book Term
+            </button>
+            <!-- <div class="col-md-12 border border-primary mt-2">
+            <div class="row">
+              <div class="col-md-12">
+                <h4 class="text-center">Book Term</h4>
+              </div>
+            </div>
+
+            <form [formGroup]="bookForm">
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="inputStartTime">Start Time</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">
+                        <i class="far fa-clock"></i>
+                      </span>
+                    </div>
+                    <select
+                      class="custom-select"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.startTime.errors
+                      }"
+                      id="inputStartTime"
+                      formControlName="startTime"
+                      (change)="onStartTimeChange($event)"
+                    >
+                      <option *ngFor="let time of times" value="{{ time }}">
+                        {{ time }}
+                      </option>
+                    </select>
+                    <div
+                      *ngIf="submitted && f.startTime.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.startTime.errors?.required">
+                        Start time is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputEndTime">End Time</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">
+                        <i class="far fa-clock"></i>
+                      </span>
+                    </div>
+                    <select
+                      class="custom-select"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.endTime.errors
+                      }"
+                      id="inputEndTime"
+                      formControlName="endTime"
+                      (change)="onEndTimeChange($event)"
+                    >
+                      <option *ngFor="let time of times" value="{{ time }}">
+                        {{ time }}
+                      </option>
+                    </select>
+                    <div
+                      *ngIf="submitted && f.endTime.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.endTime.errors?.required">
+                        End time is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="errorMessage" class="row">
+                <div class="col-md-12">
+                  <div class="alert alert-danger" role="alert">
+                    {{ errorMessage }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <button
+                    (click)="createBooking()"
+                    class="btn btn-lg btn-success w-100 mb-2"
+                  >
+                    Book Term
+                  </button>
+                </div>
+              </div>
+            </form>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="row">
+          <div class="col-md-12">
+            <img
+              *ngIf="result.personalCoachTerm?.user.image; else noFieldImage2"
+              src="{{ result.personalCoachTerm?.user.image }}"
+              class="image"
+            />
+            <ng-template #noFieldImage2>
+              <img
+                src="../../../../assets/profilePlaceholder.jpg"
+                class="image"
+              />
+            </ng-template>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h5 class="text-center">Trainer info</h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">Name</div>
+          <div class="col-md-9">
+            {{ result.personalCoachTerm.user.name }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">Email</div>
+          <div class="col-md-9 break-word">
+            {{ result.personalCoachTerm.user.email }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">Phone</div>
+          <div class="col-md-9">{{ result.personalCoachTerm.user.phone }}</div>
+        </div>
+      </div>
+    </div>
+    <hr />
+  </div>
+</div>
+
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Are you sure?</h4>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">You are about to create new booking.</h5>
+    <div class="row">
+      <div class="col-md-12">City: {{ result.personalCoachTerm.city }}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">Sport: {{ result.personalCoachTerm.sport }}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        Date: {{ result.personalCoachTerm?.startDate | date: "dd.MM.yyyy" }}
+      </div>
+    </div>
+    <!-- <div class="row">
+      <div class="col-md-12">
+        From: {{ bookingData?.startDate | date: "dd.MM.yyyy" }} to
+        {{ bookingData.endDate | date: "dd.MM.yyyy" }}
+      </div>
+    </div> -->
+    <div class="row">
+      <div class="col-md-12">
+        Price: {{ calculatePriceForSelectedTime() }} €
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        Place:name, Address
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="onModalConfirm()">
+      Book term
+    </button>
+    <button type="button" class="btn btn-danger" (click)="close()">
+      Cancel
+    </button>
+  </div>
+</ng-template>
